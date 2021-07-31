@@ -1,0 +1,414 @@
+from tkinter import *
+from tkinter import ttk
+from googletrans import Translator
+from tkinter import messagebox
+import speech_recognition as sr
+import pyttsx3
+import wikipedia
+import pytube
+from pytube import YouTube
+import time
+from tkinter.scrolledtext import ScrolledText
+from tkinter import filedialog
+from tkinter import messagebox, font
+from datetime import datetime
+import webbrowser
+import tkinter as tk
+from PIL import ImageTk, Image
+import smtplib
+import pygame
+import os
+
+root=Tk()
+root.title('MultiPurpose Application')
+root.geometry('800x430')
+root.maxsize(800,430)
+root.minsize(800,430)
+root['bg']='light blue'
+
+header= Label(root,bg='orange',width=300,height=2)
+header.place(x=0,y=0)
+h1= Label(root,text='MultiPurpose Application',bg='orange',fg='black',
+font=('verdana',16,'bold'))
+h1.place(x=240,y=2)
+
+
+def lang_trans():
+    root=Tk()
+    root.title('Language Translator')
+    root.geometry('800x330')
+    root.maxsize(800,430)
+    root.minsize(800,430)
+    root['bg']='light blue'
+    header= Label(root,bg='orange',width=300,height=2)
+    header.place(x=0,y=0)
+    h1= Label(root,text='Language Translator',bg='orange',fg='black',
+    font=('verdana',16,'bold'))
+    h1.place(x=260,y=2)
+    
+    def translate():
+        lan=t1.get('1.0','end-1c')
+        cl=choose_l.get()
+        if lan == "":
+            messagebox.showerror('Language Translator','Please fill the box')
+        else:
+            trans=Translator()
+            output=trans.translate(lan,dest=cl)
+            t2.delete(1.0,END)
+            t2.insert('end',output.text)
+    
+    def clear():
+        t1.delete(1.0,END)
+        t2.delete(1.0,END)
+
+    def SpeakText():
+        t1.delete(1.0,END)
+        t2.delete(1.0,END)
+        r=sr.Recognizer()
+        with sr.Microphone() as source:
+            audio=r.record(source,duration=3)
+            print("Recording..")
+            Mytext=r.recognize_google(audio)
+            t1.insert('end',Mytext)
+            SpeakText1(Mytext)
+
+    def SpeakText1(command):
+        engine=pyttsx3.init()
+        engine.say(command)
+        engine.runAndWait()
+        
+
+    a=StringVar()
+    auto_detect=ttk.Combobox(root,width=20,textvariable=a,state='readonly', font=('verdana',10,'bold'))
+    auto_detect['values']=('Auto Detect',)
+    auto_detect.place(x=150,y=70)
+    auto_detect.current(0)
+
+    l=StringVar()
+    choose_l=ttk.Combobox(root,width=20,textvariable=l,state='readonly', font=('verdana',10,'bold'))
+    choose_l['values']=('Afrikaans','Arabic','Bengali','Hindi','English','Nepali','Marathi','Punjabi','Latin',)
+    choose_l.place(x=410,y=70)
+    choose_l.current(3)
+
+    t1=Text(root,width=30,height=10,borderwidth=5,relief=RIDGE)
+    t1.place(x=130,y=100)
+
+    t2=Text(root,width=30,height=10,borderwidth=5,relief=RIDGE)
+    t2.place(x=380,y=100)
+
+    b1=Button(root,text='Translate',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),
+    bg='red',fg='white',cursor="hand2",command=translate)
+    b1.place(x=340,y=280)
+
+    b2=Button(root,text='Clear',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),bg='red',fg='white',cursor="hand1",command=clear)
+    b2.place(x=560,y=280)
+
+    b=Button(root,text='Tap to Speak',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),bg='red',fg='white',cursor="hand2",command=SpeakText)
+    b.place(x=130,y=280)
+
+    
+
+def wiki():
+    root=Tk()
+    root.title('Wikipedia')
+    root.geometry('800x330')
+    root.maxsize(800,430)
+    root.minsize(800,430)
+    root['bg']='light blue'
+    header= Label(root,bg='orange',width=300,height=2)
+    header.place(x=0,y=0)
+    h1= Label(root,text='Wikipedia',bg='orange',fg='black',
+    font=('verdana',16,'bold'))
+    h1.place(x=300,y=2)
+
+    def SpeakTextt(command):
+        engine=pyttsx3.init()
+        engine.say(command)
+        engine.runAndWait()
+
+    def SpeakText2():
+        t3.delete(0,END)
+        r=sr.Recognizer()
+        with sr.Microphone() as source:
+            audio=r.record(source,duration=5)
+            print("Recording..")
+            Mytext1=r.recognize_google(audio)
+            t3.insert('end',Mytext1)
+            SpeakTextt(Mytext1)
+
+    def search():
+        t4.delete(1.0,END)
+        result=wikipedia.summary(t3.get())
+        t4.insert('end',result)
+    def clear():
+        t4.delete(1.0,END)
+    
+    l4=Label(root,text="Search Text",fg='black' ,font=('verdana',12,'bold'))
+    l4.place(x=140,y=60)
+    t3=Entry(root,width=25,borderwidth=5,relief=RIDGE)
+    t3.place(x=280,y=60)
+    b3=Button(root,text='Tap to Speak',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),bg='red',fg='white',cursor="hand2",command=SpeakText2)
+    b3.place(x=470,y=60)
+
+    b4=Button(root,text='Search',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),bg='red',fg='white',cursor="hand2",command=search)
+    b4.place(x=320,y=100)
+    t4=Text(root,width=70,height=10,borderwidth=5,relief=RIDGE)
+    t4.place(x=100,y=150)
+    b4=Button(root,text='Clear',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),bg='red',fg='white',cursor="hand1",command=clear)
+    b4.place(x=320,y=330)
+
+def note():
+    root=Tk()
+    root.geometry('500x500')
+    root.maxsize(500,500)
+    root.minsize(500,500)
+    root.title('notepad')
+    #root.iconbitmap('notepad.ico')
+
+    def new():
+        text.delete('1.0','end')
+
+    def Open():
+        root.filename=filedialog.askopenfilename(initialdir='/',title='Select File',
+        filetypes=(('text files','*.txt'),('all files','*.*')))
+        file1=open(root.filename)
+        text.insert('end',file1.read())
+
+    def save():
+        pass
+
+    def save_as():
+        root.filename=filedialog.asksaveasfile(mode='w',defaultextension='.txt')
+        if root.filename is None:
+            return
+        file_save=str(text.get(1.0,END))
+        root.filename.write(file_save)
+        root.filename.close()
+
+    def exit():
+        message=messagebox.askquestion('Notepad','Do you want to save changes?')
+        if message=='yes':
+            save_as()
+        else:
+            root.destroy()
+
+    menubar=Menu(root)
+    file=Menu(menubar,tearoff=0)
+    file.add_command(label='New',command=new)
+    file.add_command(label='Open',command=Open)
+    file.add_command(label='Save',command=save)
+    file.add_command(label='Save as',command=save_as)
+    file.add_separator()
+    file.add_command(label='Exit',command=exit)
+    menubar.add_cascade(label='File',menu=file,font=('verdana',10,'bold'))
+
+    def cut():
+        text.event_generate("<<Cut>>")
+
+    def copy():
+        text.event_generate("<<Copy>>")
+
+    def paste():
+        text.event_generate("<<Paste>>")
+
+    def delete():
+        message=messagebox.askquestion('Notepad','Do you want to delete all')
+        if message=='yes':
+            text.delete('1.0','end')
+        else:
+            return 'break'
+
+    def time():
+        d=datetime.now()
+        text.insert('end',d)
+
+    def select_all():
+        text.tag_add('sel','1.0','end')
+        return 'break'
+
+    def fonts():
+        root=tk.Tk()
+        root.geometry('400x400')
+        root.maxsize(400,400)
+        root.minsize(400,400)
+        root.title('Font')
+        l1=Label(root,text="Font")
+        l1.place(x=10,y=10)
+        f=tk.StringVar()
+        fonts=ttk.Combobox(root,width=15,textvariable=f,state='readonly',font=('Verdana',10,'bold'),)
+        fonts['values']=font.families()
+        fonts.place(x=10,y=30)
+        fonts.current(0)
+        l2=Label(root,text='Font Style:')
+        l2.place(x=175,y=10)
+        st=tk.StringVar()
+        style=ttk.Combobox(root,width=10,textvariable=st,state='readonly',font=('Verdana',10,'bold'),)
+        style['values']=('bold','bold italic','italic','underline',)
+        style.place(x=175,y=30)
+        style.current(0)
+        l3=Label(root,text='Size:')
+        l3.place(x=300,y=10)
+        sz=tk.StringVar()
+        size=ttk.Combobox(root,width=7,textvariable=sz,state='readonly',font=('Verdana',10,'bold'),)
+        size['values']=(8,9,10,12,14,16,18,20,22,24,26,28,36,48,72)
+        size.place(x=300,y=30)
+        size.current(0)
+        sample=LabelFrame(root,text="Sample",height=100,width=200)
+        sample['font']=(fonts.get(),size.get(),style.get())
+        sample.place(x=180,y=220)
+        def Ok():
+            text['font']=(fonts.get(),size.get(),style.get())
+            root.destroy()
+
+        def apl():
+            l4['font']=(fonts.get(),size.get(),style.get())
+        def cnl():
+            root.destroy()
+
+        l4=Label(sample,text='This is sample')
+        l4.place(x=20,y=30)
+        ok=Button(root,text='OK',relief=RIDGE,borderwidth=2,padx=20,highlightcolor='blue',command=Ok)
+        ok.place(x=137,y=350)
+        apply=Button(root,text='Apply',relief=RIDGE,borderwidth=2,padx=20,highlightcolor='blue',command=apl)
+        apply.place(x=210,y=350)
+        cancel=Button(root,text='Cancel',relief=RIDGE,borderwidth=2,padx=20,highlightcolor='blue',command=cnl)
+        cancel.place(x=295,y=350)
+        root.mainloop()
+
+    edit=Menu(menubar,tearoff=0)
+    edit.add_command(label='Cut',accelerator='Ctrl+X',command=cut)
+    edit.add_command(label='Copy',accelerator='Ctrl+C',command=copy)
+    edit.add_command(label='Paste',accelerator='Ctrl+V',command=paste)
+    edit.add_command(label='Delete',accelerator='Del',command=delete)
+    edit.add_command(label='Select All',accelerator='Ctrl+A',command=select_all)
+    edit.add_command(label='Time/Date',accelerator='F5',command=time)
+    menubar.add_cascade(label='Edit',menu=edit,font=('verdana',10,'bold'))
+
+    format=Menu(menubar,tearoff=0)
+    format.add_command(label='Font...',command=fonts)
+    menubar.add_cascade(label='Format',menu=format)
+
+
+
+    root.config(menu=menubar)
+    text=ScrolledText(root,width=62,height=31)
+    text.place(x=0,y=0)
+    #t=Text(root,width=62,height=31,borderwidth=5,relief=RIDGE)
+    #t.place(x=0,y=0)
+
+    root.mainloop()
+
+
+
+def Mail():
+    root=Tk()
+    root.title('Email Sender')
+    root.geometry('800x330')
+    root.maxsize(800,430)
+    root.minsize(800,430)
+    root['bg']='light blue'
+    header= Label(root,bg='orange',width=300,height=2)
+    header.place(x=0,y=0)
+    h1= Label(root,text='Email Sender',bg='orange',fg='black',
+    font=('verdana',16,'bold'))
+    h1.place(x=340,y=2)
+
+    e=Label(root,text='Email Address',font=('verdana',16,'bold'),bg='light blue')
+    e.place(x=150,y=100)
+    email=Entry(root,width=35,relief=RIDGE,borderwidth=3)
+    email.place(x=350,y=100)
+    p=Label(root,text='Password',font=('verdana',16,'bold'),bg='light blue')
+    p.place(x=150,y=170)
+    pas=Entry(root,width=35,show='*',relief=RIDGE,borderwidth=3)
+    pas.place(x=350,y=170)
+
+    def Login():
+        e=email.get()
+        p=pas.get()
+        if '@gmail.com' not in e or e == "":
+            messagebox.showerror('Login error','Please Write the Valid Email')
+        elif p=="":
+            messagebox.showerror('Login Error',"Password shouldn't be empty" )
+        else:
+            try:
+                s=smtplib.SMTP('smtp.gmail.com',587)
+                s.starttls()
+                s.login(e,p)
+                messagebox.showinfo("Login Success","Yoh have logged to gmail successfully")
+                root=tk.Tk()
+                root.title('Email Sender')
+                root.geometry('800x330')
+                root.maxsize(800,430)
+                root.minsize(800,430)
+                root['bg']='light blue'
+                header= Label(root,bg='orange',width=300,height=2)
+                header.place(x=0,y=0)
+                h1= Label(root,text='Email Sender',bg='orange',fg='black',
+                font=('verdana',16,'bold'))
+                h1.place(x=340,y=2)
+                r=Label(root,text='Recipent Email Address',font=('verdana',16,'bold'),bg='light blue')
+                r.place(x=130,y=70)
+                r1=Entry(root,width=40,relief=RIDGE,borderwidth=3)
+                r1.place(x=130,y=110)
+                s2=Label(root,text='Subject',font=('verdana',16,'bold'),bg='light blue')
+                s2.place(x=130,y=140)
+                s1=Entry(root,width=40,relief=RIDGE,borderwidth=3)
+                s1.place(x=130,y=170)
+                m=Label(root,text='Message',font=('verdana',16,'bold'),bg='light blue')
+                m.place(x=130,y=200)
+                message=ScrolledText(root,width=50,height=7,relief=RIDGE,borderwidth=3)
+                message.place(x=130,y=240)
+                
+                def Logout():
+                    s.quit()
+                    root.destroy()
+                logout=Button(root,text='Logout',padx=20,bg='red',relief=RIDGE,borderwidth=1,
+                font=('verdana',10,'bold'),cursor='hand2',command=Logout)
+                logout.place(x=680,y=40)
+                def send():
+                    rec=r1.get()
+                    sub=s1.get()
+                    mess=message.get('1.0',END)
+                    if '@gmail.com' not in rec or rec =='':
+                        messagebox.showerror('Sending Mail Error','Please write the valid email')
+                    elif mess=="":
+                        messagebox.showerror('Sending Mail Error','Message should not be empty')
+                    else:
+                        s.sendmail(e,rec,f'Subject :{sub}\n\n {mess}')
+                        messagebox.showinfo("Success","Your message has been sent successfully")
+                send=Button(root,text='Send',padx=20,bg='red',relief=RIDGE,borderwidth=1,
+                font=('verdana',10,'bold'),cursor='hand2',command=send)
+                send.place(x=230,y=370)
+
+
+            except:
+                messagebox.showerror('Login Error','Failed to login.Either your email or password is wrong or you did not enable less secure App in gmail setting.')
+    b=Button(root,text='LOGIN',padx=30,bg='red',relief=RIDGE,borderwidth=1,
+    font=('verdana',12,'bold'),cursor='hand2',command=Login)
+    b.place(x=350,y=230)
+    root.mainloop()
+
+b1=Button(root,text='Language Translator',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),
+bg='red',fg='white',cursor="hand2", command=lang_trans)
+b1.place(x=300,y=160)
+
+b2=Button(root,text='Wikipedia',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),
+bg='red',fg='white',cursor="hand2",width=17, command=wiki)
+b2.place(x=300,y=300)
+
+b3=Button(root,text='Notepad',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),
+bg='red',fg='white',cursor="hand2",width=17, command=note)
+b3.place(x=300,y=230)
+
+b4=Button(root,text='Email System',borderwidth=3,relief=RIDGE,font=('verdana',10,'bold'),
+bg='red',fg='white',cursor="hand2",width=17, command=Mail)
+b4.place(x=300,y=90)
+
+
+
+
+
+
+
+
+root.mainloop()
